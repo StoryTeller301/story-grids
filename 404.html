@@ -4,15 +4,28 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    // Handle GitHub Pages path issues
-    var pathSegments = window.location.pathname.split('/');
-    var repoName = pathSegments[1];
-    var path = pathSegments.slice(2).join('/');
-    var redirectUrl = window.location.origin + '/' + repoName + '/#/' + path;
-    window.location.replace(redirectUrl);
+    // Single Page App GitHub Pages Refresh Fix
+    // This script handles redirects for GitHub Pages when using client-side routing
+    // When a user refreshes the page on a route like /some/path, GitHub Pages would normally return 404
+    // This script redirects back to the index.html with the correct route information
+    
+    (function() {
+      // Get the current URL path
+      var path = window.location.pathname;
+      
+      // Extract the repository name from the path
+      var pathSegments = path.split('/');
+      var repoName = pathSegments[1];
+      
+      // Build the redirect URL to the root index.html
+      var redirectUrl = window.location.origin + '/' + repoName + '/';
+      
+      // Redirect to the main page
+      window.location.replace(redirectUrl);
+    })();
   </script>
 </head>
 <body>
-  <p>Redirecting...</p>
+  <p>Redirecting to Story Grids application...</p>
 </body>
 </html>
