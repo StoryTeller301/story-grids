@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Grids</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(45deg, #4285F4, #5E97F6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffffff, #e3f2fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #e3f2fd;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e3f2fd;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4285F4;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #4285F4, #5E97F6);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(66, 133, 244, 0.3);
+        }
+
+        .passkey-hint {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 14px;
+            color: #e3f2fd;
+        }
+
+        .main-app {
+            display: none;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(45deg, #4285F4, #5E97F6);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .grid-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .grid-item h3 {
+            margin-bottom: 15px;
+            color: #e3f2fd;
+            font-size: 1.2rem;
+        }
+
+        .grid-item textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .grid-item textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .snowflake-step {
+            margin-bottom: 30px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4285F4, #5E97F6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            color: #e3f2fd;
+        }
+
+        .step-description {
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .step-input {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .step-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(45deg, #4285F4, #5E97F6);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .auth-container {
+                padding: 30px 20px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">SG</div>
+                <h1 class="app-title">Story Grids</h1>
+            </div>
+        </div>
+
+        <!-- Authentication Screen -->
+        <div id="auth-screen" class="auth-container">
+            <h2 class="auth-title">Enter the passkey to access Story Grids</h2>
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="passkey" class="form-label">Passkey:</label>
+                    <input 
+                        type="password" 
+                        id="passkey" 
+                        class="form-input" 
+                        placeholder="Enter passkey"
+                        required
+                    >
+                </div>
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+            <div class="passkey-hint">
+                Passkey: STORYTELLER311
+            </div>
+        </div>
+
+        <!-- Main Application -->
+        <div id="main-app" class="main-app">
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="grid">Story Grid</button>
+                <button class="nav-tab" data-tab="snowflake">Snowflake Method</button>
+            </nav>
+
+            <!-- Story Grid Tab -->
+            <div id="grid-tab" class="tab-content active">
+                <h2 style="margin-bottom: 20px; color: #e3f2fd;">Story Grid Framework</h2>
+                <p style="margin-bottom: 30px; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                    Use this framework to develop your story structure. Fill in each section to build a comprehensive outline.
+                </p>
+                
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <h3>Genre & Theme</h3>
+                        <textarea placeholder="What genre is your story? What's the central theme or message?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Protagonist</h3>
+                        <textarea placeholder="Who is your main character? What do they want? What's their internal conflict?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Antagonist</h3>
+                        <textarea placeholder="Who or what opposes your protagonist? What are their motivations?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Inciting Incident</h3>
+                        <textarea placeholder="What event kicks off your story and forces your protagonist into action?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Progressive Complications</h3>
+                        <textarea placeholder="What obstacles and challenges does your protagonist face?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Crisis</h3>
+                        <textarea placeholder="What's the moment of maximum tension? The point of no return?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Climax</h3>
+                        <textarea placeholder="How does your protagonist face their greatest challenge?"></textarea>
+                    </div>
+                    <div class="grid-item">
+                        <h3>Resolution</h3>
+                        <textarea placeholder="How does the story conclude? What has changed?"></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn primary" onclick="saveGrid()">Save Grid</button>
+                    <button class="action-btn secondary" onclick="exportGrid()">Export Grid</button>
+                    <button class="action-btn secondary" onclick="clearGrid()">Clear Grid</button>
+                </div>
+            </div>
+
+            <!-- Snowflake Method Tab -->
+            <div id="snowflake-tab" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #e3f2fd;">Snowflake Method</h2>
+                <p style="margin-bottom: 30px; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                    The Snowflake Method helps you build your story from a simple idea into a complex, well-structured novel.
+                </p>
+
+                <div class="snowflake-step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">One-Sentence Summary</h3>
+                    </div>
+                    <p class="step-description">
+                        Write a one-sentence summary of your novel. This should be the essence of your story in 15 words or less.
+                    </p>
+                    <textarea class="step-input" placeholder="Example: A reluctant hobbit must destroy a powerful ring to save Middle-earth from evil."></textarea>
+                </div>
+
+                <div class="snowflake-step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">One-Paragraph Summary</h3>
+                    </div>
+                    <p class="step-description">
+                        Expand your sentence into a paragraph. Include the setup, major conflicts, and ending.
+                    </p>
+                    <textarea class="step-input" placeholder="Expand your one-sentence summary into a full paragraph describing the story arc..."></textarea>
+                </div>
+
+                <div class="snowflake-step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Character Summaries</h3>
+                    </div>
+                    <p class="step-description">
+                        Create one-page summaries for your main characters, including their motivation, goal, conflict, and epiphany.
+                    </p>
+                    <textarea class="step-input" placeholder="Character Name: [Name]&#10;Motivation: What drives this character?&#10;Goal: What do they want?&#10;Conflict: What prevents them from getting it?&#10;Epiphany: How do they change?"></textarea>
+                </div>
+
+                <div class="snowflake-step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">One-Page Plot Summary</h3>
+                    </div>
+                    <p class="step-description">
+                        Expand your paragraph into a full page, with one paragraph for each major plot point.
+                    </p>
+                    <textarea class="step-input" placeholder="Expand each sentence from your paragraph summary into a full paragraph..."></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn primary" onclick="saveSnowflake()">Save Progress</button>
+                    <button class="action-btn secondary" onclick="exportSnowflake()">Export Snowflake</button>
+                    <button class="action-btn secondary" onclick="clearSnowflake()">Clear All</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2025 Story Grids - A tool for writers</p>
+        </footer>
+    </div>
+
+    <script>
+        // Authentication
+        document.getElementById('auth-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const passkey = document.getElementById('passkey').value;
+            
+            if (passkey === 'STORYTELLER311') {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').classList.add('active');
+                loadSavedData();
+            } else {
+                alert('Incorrect passkey. Please try again.');
+                document.getElementById('passkey').value = '';
+            }
+        });
+
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(targetTab + '-tab').classList.add('active');
+            });
+        });
+
+        // Story Grid Functions
+        function saveGrid() {
+            const gridData = {};
+            const gridItems = document.querySelectorAll('#grid-tab .grid-item');
+            
+            gridItems.forEach((item, index) => {
+                const title = item.querySelector('h3').textContent;
+                const content = item.querySelector('textarea').value;
+                gridData[title] = content;
+            });
+            
+            localStorage.setItem('storyGrid', JSON.stringify(gridData));
+            alert('Story Grid saved successfully!');
+        }
+
+        function exportGrid() {
+            const gridData = {};
+            const gridItems = document.querySelectorAll('#grid-tab .grid-item');
+            
+            gridItems.forEach((item, index) => {
+                const title = item.querySelector('h3').textContent;
+                const content = item.querySelector('textarea').value;
+                gridData[title] = content;
+            });
+            
+            let exportText = 'STORY GRID EXPORT\\n\\n';
+            for (const [key, value] of Object.entries(gridData)) {
+                exportText += `${key.toUpperCase()}:\\n${value}\\n\\n`;
+            }
+            
+            downloadText(exportText, 'story-grid.txt');
+        }
+
+        function clearGrid() {
+            if (confirm('Are you sure you want to clear all grid data?')) {
+                document.querySelectorAll('#grid-tab textarea').forEach(textarea => {
+                    textarea.value = '';
+                });
+                localStorage.removeItem('storyGrid');
+            }
+        }
+
+        // Snowflake Method Functions
+        function saveSnowflake() {
+            const snowflakeData = {};
+            const steps = document.querySelectorAll('#snowflake-tab .snowflake-step');
+            
+            steps.forEach((step, index) => {
+                const title = step.querySelector('.step-title').textContent;
+                const content = step.querySelector('.step-input').value;
+                snowflakeData[title] = content;
+            });
+            
+            localStorage.setItem('snowflakeMethod', JSON.stringify(snowflakeData));
+            alert('Snowflake Method progress saved successfully!');
+        }
+
+        function exportSnowflake() {
+            const snowflakeData = {};
+            const steps = document.querySelectorAll('#snowflake-tab .snowflake-step');
+            
+            steps.forEach((step, index) => {
+                const title = step.querySelector('.step-title').textContent;
+                const content = step.querySelector('.step-input').value;
+                snowflakeData[title] = content;
+            });
+            
+            let exportText = 'SNOWFLAKE METHOD EXPORT\\n\\n';
+            for (const [key, value] of Object.entries(snowflakeData)) {
+                exportText += `${key.toUpperCase()}:\\n${value}\\n\\n`;
+            }
+            
+            downloadText(exportText, 'snowflake-method.txt');
+        }
+
+        function clearSnowflake() {
+            if (confirm('Are you sure you want to clear all Snowflake Method data?')) {
+                document.querySelectorAll('#snowflake-tab .step-input').forEach(textarea => {
+                    textarea.value = '';
+                });
+                localStorage.removeItem('snowflakeMethod');
+            }
+        }
+
+        // Utility Functions
+        function downloadText(text, filename) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function loadSavedData() {
+            // Load Story Grid data
+            const savedGrid = localStorage.getItem('storyGrid');
+            if (savedGrid) {
+                const gridData = JSON.parse(savedGrid);
+                const gridItems = document.querySelectorAll('#grid-tab .grid-item');
+                
+                gridItems.forEach(item => {
+                    const title = item.querySelector('h3').textContent;
+                    const textarea = item.querySelector('textarea');
+                    if (gridData[title]) {
+                        textarea.value = gridData[title];
+                    }
+                });
+            }
+            
+            // Load Snowflake Method data
+            const savedSnowflake = localStorage.getItem('snowflakeMethod');
+            if (savedSnowflake) {
+                const snowflakeData = JSON.parse(savedSnowflake);
+                const steps = document.querySelectorAll('#snowflake-tab .snowflake-step');
+                
+                steps.forEach(step => {
+                    const title = step.querySelector('.step-title').textContent;
+                    const textarea = step.querySelector('.step-input');
+                    if (snowflakeData[title]) {
+                        textarea.value = snowflakeData[title];
+                    }
+                });
+            }
+        }
+
+        // Auto-save functionality
+        setInterval(() => {
+            const gridData = {};
+            const gridItems = document.querySelectorAll('#grid-tab .grid-item');
+            
+            gridItems.forEach(item => {
+                const title = item.querySelector('h3').textContent;
+                const content = item.querySelector('textarea').value;
+                if (content.trim()) {
+                    gridData[title] = content;
+                }
+            });
+            
+            if (Object.keys(gridData).length > 0) {
+                localStorage.setItem('storyGrid', JSON.stringify(gridData));
+            }
+            
+            const snowflakeData = {};
+            const steps = document.querySelectorAll('#snowflake-tab .snowflake-step');
+            
+            steps.forEach(step => {
+                const title = step.querySelector('.step-title').textContent;
+                const content = step.querySelector('.step-input').value;
+                if (content.trim()) {
+                    snowflakeData[title] = content;
+                }
+            });
+            
+            if (Object.keys(snowflakeData).length > 0) {
+                localStorage.setItem('snowflakeMethod', JSON.stringify(snowflakeData));
+            }
+        }, 30000); // Auto-save every 30 seconds
+    </script>
+</body>
+</html>
+
